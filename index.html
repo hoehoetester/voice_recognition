@@ -16,6 +16,13 @@
 <h2>click Start button and speak color name</h2>
 <button>Start</button>
 <div id="state"></div>
+
+<hr>
+
+<h2>type texts and click Speak button</h2>
+<textarea name="text" id="text" cols="30" rows="4">type texts and click Speak button</textarea>
+<button id="speak">Speak</button>
+
 <script>
     'use strict';
 
@@ -62,6 +69,16 @@
         speech.onsoundend = () => {
             state.innerText = 'waiting...';
         }
+    }
+
+    {
+        const btnSpeak = document.getElementById('speak')
+        btnSpeak.addEventListener('click', () => {
+            const text = document.getElementById('text').value;
+            speechSynthesis.speak(
+                new SpeechSynthesisUtterance(text)
+            );
+        });
     }
 </script>
 </body>
