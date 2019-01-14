@@ -5,9 +5,64 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Voice Recognition</title>
+    <style>
+        * {
+            font-family: "Segoe UI", sans-serif;
+        }
+    </style>
 </head>
 <body>
-test
+<h2>click Start button and speak color name</h2>
+<button>Start</button>
+<div id="state"></div>
+<script>
+    'use strict';
+
+    {
+        const btn = document.querySelector('button');
+        const state = document.getElementById('state');
+        const speech = new webkitSpeechRecognition();
+        let isListening = false;
+
+        speech.lang = 'en-US';
+
+        btn.addEventListener('click', () => {
+
+            if (isListening) {
+                speech.stop();
+                btn.textContent = 'Start';
+                state.innerText = '';
+            } else {
+                speech.start();
+                btn.textContent = 'Stop';
+            }
+
+            isListening = !isListening;
+        });
+
+        speech.onresult = e => {
+            speech.stop();
+            if (e.results[0].isFinal) {
+                console.log(e.results[0][0].transcript);
+                document.body.style.background = e.results[0][0].transcript;
+            }
+        };
+
+        speech.onend = () => {
+            if (isListening) {
+                speech.start();
+            }
+        };
+
+        speech.onsoundstart = () => {
+            state.innerText = 'processing...';
+        };
+
+        speech.onsoundend = () => {
+            state.innerText = 'waiting...';
+        }
+    }
+</script>
 </body>
 </html>
